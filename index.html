@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pendulum Wave Synthesizer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="paper-texture"></div>
+    <main class="app-shell">
+      <aside class="control-panel">
+        <h1>Pendulum Wave Synth</h1>
+        <p class="tagline">Hypnotic pendulum waves + Japanese scales powered by Three.js + Tone.js.</p>
+
+        <div class="button-row">
+          <button id="startButton">Start Audio</button>
+          <button id="resetButton">Reset Loop</button>
+        </div>
+
+        <label>
+          Scale
+          <select id="scaleSelect"></select>
+        </label>
+
+        <label>
+          Root note
+          <select id="rootSelect"></select>
+        </label>
+
+        <label>
+          Synth type
+          <select id="synthType">
+            <option value="sine">Sine</option>
+            <option value="triangle">Triangle</option>
+            <option value="square">Square</option>
+            <option value="sawtooth">Sawtooth</option>
+          </select>
+        </label>
+
+        <label>
+          Pendulum count <span id="countOut"></span>
+          <input id="count" type="range" min="8" max="42" step="1" value="24" />
+        </label>
+
+        <label>
+          Loop duration (seconds) <span id="loopOut"></span>
+          <input id="loopDuration" type="range" min="10" max="80" step="1" value="36" />
+        </label>
+
+        <label>
+          Max angle (degrees) <span id="ampOut"></span>
+          <input id="amplitude" type="range" min="4" max="35" step="1" value="18" />
+        </label>
+
+        <label>
+          Pendulum spacing <span id="spacingOut"></span>
+          <input id="spacing" type="range" min="0.35" max="1.25" step="0.01" value="0.62" />
+        </label>
+
+        <label>
+          String length base <span id="lengthOut"></span>
+          <input id="lengthBase" type="range" min="2" max="10" step="0.1" value="5.8" />
+        </label>
+
+        <label>
+          Reverb mix <span id="reverbOut"></span>
+          <input id="reverb" type="range" min="0" max="0.65" step="0.01" value="0.2" />
+        </label>
+
+        <label>
+          Master volume (dB) <span id="volOut"></span>
+          <input id="volume" type="range" min="-28" max="2" step="1" value="-8" />
+        </label>
+
+        <p class="note">Tip: hit <strong>Start Audio</strong>, then tweak sliders and watch the full pattern loop perfectly.</p>
+      </aside>
+
+      <section class="stage-wrap">
+        <canvas id="stage"></canvas>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/tone@14.8.49/build/Tone.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
