@@ -144,10 +144,10 @@ function buildPendulums() {
   }
   pendulums.length = 0;
 
-  const depthOffset = ((state.count - 1) * state.spacing) / 2;
+  const offset = ((state.count - 1) * state.spacing) / 2;
   for (let i = 0; i < state.count; i += 1) {
     const holder = new THREE.Group();
-    const z = i * state.spacing - depthOffset;
+    const x = i * state.spacing - offset;
     const length = state.lengthBase + i * 0.085;
 
     const wireGeom = new THREE.BufferGeometry().setFromPoints([
@@ -160,12 +160,10 @@ function buildPendulums() {
     );
     holder.add(wire);
 
-    const baseColor = new THREE.Color().setHSL(0.6 - (i / state.count) * 0.35, 0.74, 0.55);
     const bob = new THREE.Mesh(
       new THREE.SphereGeometry(0.19, 18, 18),
       new THREE.MeshStandardMaterial({
-        color: baseColor.clone(),
-        emissive: new THREE.Color(0x000000),
+        color: new THREE.Color().setHSL(0.6 - (i / state.count) * 0.35, 0.74, 0.55),
         roughness: 0.34,
         metalness: 0.1,
       })
@@ -173,7 +171,7 @@ function buildPendulums() {
     bob.position.y = -length;
     holder.add(bob);
 
-    holder.position.set(0, bar.position.y, z);
+    holder.position.set(x, bar.position.y, 0);
     rig.add(holder);
 
     pendulums.push({
@@ -183,8 +181,6 @@ function buildPendulums() {
       period: state.loopDuration / (state.count + i),
       lastX: 0,
       gate: false,
-      baseColor,
-      flash: 0,
     });
   }
 
@@ -213,7 +209,6 @@ function resetLoop() {
   pendulums.forEach((p) => {
     p.lastX = 0;
     p.gate = false;
-    p.flash = 0;
   });
 }
 
@@ -230,16 +225,10 @@ function updatePendulums() {
     if (crossing && !p.gate && started && synth) {
       synth.triggerAttackRelease(noteSet[i], '8n', undefined, 0.7);
       p.gate = true;
-      p.flash = 1;
     }
 
     if (x < -0.1) p.gate = false;
     p.lastX = x;
-
-    p.flash = Math.max(0, p.flash - 0.04);
-    const bobMaterial = p.bob.material;
-    bobMaterial.color.copy(p.baseColor).lerp(new THREE.Color(0xfff279), p.flash);
-    bobMaterial.emissive.setRGB(0.85 * p.flash, 0.6 * p.flash, 0.15 * p.flash);
 
     const pulse = 0.92 + Math.abs(Math.sin(phase * 0.5)) * 0.36;
     p.bob.scale.setScalar(pulse);
